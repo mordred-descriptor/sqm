@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.8)
-
 project(blas Fortran)
 
 set(BLAS_SOURCES dasum.f daxpy.f dcabs1.f dcopy.f ddot.f dgbmv.f dgemm.f dgemv.f

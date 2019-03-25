@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.8)
-
 project(lapack Fortran)
 
 set(LAPACK_SOURCES chla_transtype.f dbdsqr.f dgebak.f dgebal.f dgebd2.f dgebrd.f

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.8)
-
 project(sqm C Fortran)
 
 set(COMMON_SOURCES findmask.F90 file_io_dat.F90 qm2_allocate_e_repul.F90 qm2_calc_charges.F90 qm2_calc_dipole.F90
@@ -49,14 +47,25 @@ include_directories("${CMAKE_BINARY_DIR}/src/sff")
 include_directories("${CMAKE_BINARY_DIR}/src/sqm")
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0")
 
-add_library(sqm_common OBJECT ${COMMON_SOURCES})
-add_executable(sqm ${EXECUTABLE_SOURCES} $<TARGET_OBJECTS:sqm_common>)
+add_library(sqm_common ${COMMON_SOURCES})
+add_executable(sqm ${EXECUTABLE_SOURCES})
 set_property(TARGET sqm PROPERTY COMPILE_DEFINITIONS SQM)
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        unset(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
-        set_property(TARGET sqm PROPERTY LINKER_LANGUAGE C)
-        set_property(TARGET sqm PROPERTY LINK_FLAGS "-static-libgcc -lgfortran ${quadmath}")
-endif()
-target_link_libraries(sqm sys constants xminC blas lapack)
+if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+        if (APPLE)
+                unset(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES)
+                set_property(TARGET sqm PROPERTY LINKER_LANGUAGE C)
 
-install(TARGETS sqm)
+                find_package(PythonInterp)
+
+                execute_process(
+                        COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/../../find_libquadmath.py" ${CMAKE_Fortran_COMPILER}
+                        OUTPUT_VARIABLE LIBQUADMATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+                set_property(TARGET sqm PROPERTY LINK_FLAGS "-static-libgcc -lgfortran ${LIBQUADMATH}")
+        elseif(UNIX)
+                set_property(TARGET sqm PROPERTY LINK_FLAGS "-static")
+        endif()
+endif()
+target_link_libraries(sqm sqm_common sys constants xminC lapack blas)
+
+install(TARGETS sqm DESTINATION "bin")
