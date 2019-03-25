@@ -1,0 +1,20 @@
+Run DFTB3 single point on water
+ &qmmm
+    qm_theory    = 'DFTB3',
+    qmcharge     = 0,
+    ! SCF settings
+    scfconv      = 1.0d-10, ! kcal/mol
+    errconv      = 1.d-06,  ! au
+    tight_p_conv = 1,
+    itrmax       = 100,
+    ! Geometry optimization settings
+    maxcyc       = 100, 
+    grms_tol     = 0.02,   ! kcal/(mol*A)
+    ! Output
+    ntpr         = 1,
+    verbosity    = 0,
+ /
+ 8 O    0.00000     0.00000     0.11768
+ 1 H    0.00000     0.76026    -0.47070
+ 1 H    0.00000    -0.76026    -0.47070
+
