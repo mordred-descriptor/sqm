@@ -1,0 +1,14 @@
+package:
+  name: sqm
+  version: "18.13{{environ.get("SQM_VERSION_SUFFIX", "")}}"
+
+source:
+  path: ../..
+
+build:
+  number: 0
+
+about:
+  home: http://ambermd.org/AmberTools.php
+  license: GPLv3
+  summary: sqm in AmberTools

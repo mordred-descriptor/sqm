@@ -1,0 +1,12 @@
+language: bash
+sudo: true
+os:
+  - windows
+  - osx
+  - linux
+install: ./ci/install.sh
+script: ./ci/script.sh
+after_success: ./ci/after_success.sh
+env:
+  global:
+    secure: OWb5JjxWrmJcCXYbmtq274ro8hv8UR/GEre3ULi+C8dp2jeDepiHTFV9e0OhkmuzOEOgRPfnVsydSMTjSnlIfeRppDQ3lxo51awCz2IxybmhgF0ph9ALaxvSaVjIwMpB3WjevIdHdM7HK9OqjSFq7YO5gWNLVhEhcEJYKtuhgbsrdmB5OOrIms1VPbxLFpPoROtN4kGv1wuY+y5yrTHLjXjer9vcgtK8G4nVxU+ayEPxoC8rG2CbxcPZaMjPNGakNgTvsbTquzQfyrMb8ot41hxzPirdWaoJAgfbPYb75v66Q1YBI+y3VKAxjyuBNWmrxRNfd1t+gR2W649da9AHnRWVtGze2j53hOTHQwVC3wsf5hlmoxsbLiNo23BhPJ8AcnWW0jV5p1oZX7wZUBf0QdYLR4EnTiEsZKkxNLpbCRQFUXMM6Hq1O16lhjTocXCcprqcaSIDlBMCewU9NEJqYf/QKPzr5bt7OhwcZZZMAJosxNDYCGCt6gXKva6RbCF7pWTXQExTLo5RUIoWz3/oAW6BTN2UODxmpAiWxyE5zXBV0EIqcjSzEaiMdcxkbnPnQf4dBETXtEyRn0UcPlJcYSpN5R1EOQ7DTZwhGNucyHIevdmBnSJB+bGmFQr1FYOPfn0eU0plBFwSJKp0zAPsHp6Xu2BJGeZy046c2yNTotw=
