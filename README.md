@@ -3,19 +3,21 @@ AmberTools sqm
 [![Build Status](https://travis-ci.org/mordred-descriptor/sqm.svg?branch=master)](https://travis-ci.org/mordred-descriptor/sqm)
 [![Anaconda-Server Badge](https://anaconda.org/mordred-descriptor/sqm/badges/version.svg)](https://anaconda.org/mordred-descriptor/sqm)
 
+binary distribution of AmberTools sqm.
+
 installation
 --
 
 conda
 
-```
+```.bash
 conda install sqm -c mordred-descriptor
 ```
 
 from source
 
-```
-apt install cmake gfortran gcc  # ubuntu
+```.bash
+# apt install cmake gfortran gcc  # ubuntu
 git clone https://github.com/mordred-descriptor/sqm.git
 
 mkdir build
@@ -30,7 +32,7 @@ cmake --build . --target install
 
 use dftb
 --
-```
+```.bash
 git clone https://github.com/mordred-descriptor/sqm.git
 export AMBERHOME=$PWD/sqm
 ```
