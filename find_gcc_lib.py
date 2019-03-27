@@ -18,8 +18,8 @@ def get_library_path(gcc):
 
 
 def main():
-    _, gcc = sys.argv
-    print(shutil.which("libquadmath.a", mode=os.F_OK, path=get_library_path(gcc)))
+    _, gcc, name = sys.argv
+    print(shutil.which(name, mode=os.F_OK, path=get_library_path(gcc)))
 
 
 if __name__ == "__main__":
