@@ -8,27 +8,29 @@ binary distribution of AmberTools sqm.
 installation
 --
 
-conda
+* conda
 
-```.bash
-conda install sqm -c mordred-descriptor
-```
+    ```.bash
+    conda install sqm -c mordred-descriptor
+    ```
 
-from source
+* [download from github release](https://github.com/mordred-descriptor/sqm/releases/latest)
 
-```.bash
-# apt install cmake gfortran gcc  # ubuntu
-git clone https://github.com/mordred-descriptor/sqm.git
+* from source
 
-mkdir build
-cd build
-
-cmake -DCMAKE_BUILD_TYPE=Release ..
-
-cmake --build .
-ctest
-cmake --build . --target install
-```
+    ```.bash
+    # apt install cmake gfortran gcc  # ubuntu
+    git clone https://github.com/mordred-descriptor/sqm.git
+    
+    mkdir build
+    cd build
+    
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    
+    cmake --build .
+    ctest
+    cmake --build . --target install
+    ```
 
 use dftb
 --
