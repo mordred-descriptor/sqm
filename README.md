@@ -3,7 +3,11 @@ AmberTools sqm
 [![Build Status](https://travis-ci.org/mordred-descriptor/sqm.svg?branch=master)](https://travis-ci.org/mordred-descriptor/sqm)
 [![Anaconda-Server Badge](https://anaconda.org/mordred-descriptor/sqm/badges/version.svg)](https://anaconda.org/mordred-descriptor/sqm)
 
-binary distribution of AmberTools sqm.
+modified version of AmberTools sqm.
+
+modifications
+--
+* add option to dump msgpack
 
 installation
 --
