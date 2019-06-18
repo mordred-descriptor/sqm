@@ -29,7 +29,7 @@ program sqm
    integer last_arg_index !   index of the last argument
    integer ntpr
    character owrite
-   character(len=MAX_FN_LEN) mdin, mdout 
+   character(len=MAX_FN_LEN) mdin, mdout, msgpackout
    ! external charge
    _REAL_ excharge(4000)
    integer chgatnum(1000)
@@ -40,6 +40,9 @@ program sqm
    _REAL_  :: grms_tol
    _REAL_  :: total_energy
    logical :: master=.true.
+   logical :: dump_msgpack = .false.
+   integer :: msgpack_version = 1
+   integer :: i
 
 
    character(len=strlen) :: string
@@ -70,6 +73,7 @@ program sqm
    
    mdin   = 'mdin'
    mdout  = 'mdout'
+   msgpackout = 'mdout.msgpack'
    iarg = 0
    owrite = 'N'  ! output status: New
    last_arg_index = command_argument_count()
@@ -86,12 +90,20 @@ program sqm
          call getarg(iarg,mdout)
       else if (arg == '-O') then
          owrite = 'R'   ! output status: Replace
-      else if (arg == '-h') then
-         write(6,'(a)') 'sqm [-O] -i <input> -o <output>'
+      else if (arg == '-b') then
+         iarg = iarg + 1
+         call getarg(iarg, msgpackout)
+         dump_msgpack = .true.
+      else if (arg == '--msgpack-version') then
+         write(6, '(i0)') msgpack_version
+         call mexit(6, 0)
+      else if (arg == '-h' .OR. arg == '--help') then
+         write(6,'(a)') 'sqm [-O] -i <input> -o <output> -b <output>'
          write(6,'(a)') '   -O           Overwrite output file if it exists'
          write(6,'(a)') '   -i <input>   Input file'
          write(6,'(a)') '   -o <output>  Output file'
-         write(6,'(a)') '   -h           Show this message'
+         write(6,'(a)') '   -b <output>  msgpack output file'
+         write(6,'(a)') '   -h, --help   Show this message'
          call mexit(6, 0)
       else if (arg == ' ') then
          continue
@@ -104,6 +116,10 @@ program sqm
    igb = 0
    call amopen(5,mdin,'O','F','R')
    call amopen(6,mdout,owrite,'F','W')
+   if (dump_msgpack) then
+      open(10, file=msgpackout, status='replace', form='unformatted', access='stream', convert='big_endian')
+      write(10) '\xde', 14_2, '\xa7', 'version', 1_1
+   end if
 
    write(6,*) '           --------------------------------------------------------'
    write(6,*) '                            AMBER SQM VERSION 19'
@@ -156,12 +172,33 @@ program sqm
    ! --------------------
    ! print MO eigenvalues
    ! --------------------
+   if (dump_msgpack) then
+      write(10) '\xa7', 'nclosed'
+      write(10) '\xd2', qm2_struct%nclosed
+   end if
+
    if ( (qmmm_nml%print_eigenvalues > 0) .and. qmmm_mpi%commqmmm_master) then
       write (6,*) ''
       if (qmmm_nml%qmtheory%DFTB) then
          call print(' Final MO eigenvalues (au)', ks_struct%ev(1:ks_struct%ind(qmmm_struct%nquant_nlink+1)))
+
+         if (dump_msgpack) then
+            write(10) '\xab', 'eigenvalues'
+            write(10) '\xdd', qm2_struct%norbs
+            do i = 1, qm2_struct%norbs
+               write(10) '\xcb', ks_struct%ev(i)
+            end do
+         end if
       else
          call print(' Final MO eigenvalues (eV)', qm2_struct%eigen_values)
+
+         if (dump_msgpack) then
+            write(10) '\xab', 'eigenvalues'
+            write(10) '\xdd', qm2_struct%norbs
+            do i = 1, qm2_struct%norbs
+               write(10) '\xcb', qm2_struct%eigen_values(i)
+            end do
+         end if
       end if
    end if
 
@@ -192,18 +229,67 @@ program sqm
             qmmm_struct%hCorrection, ' kcal/mol  (', qmmm_struct%hCorrection*KCAL_TO_EV, ' eV)'
     end if
 
+   if (dump_msgpack) then
+      write(10) '\xb1', 'heat of formation'
+      write(10) '\xcb', escf
+      write(10) '\xac', 'total energy'
+      write(10) '\xcb', total_energy*EV_TO_KCAL
+      write(10) '\xb1', 'electronic energy'
+      write(10) '\xcb', qmmm_struct%elec_eng*EV_TO_KCAL
+      write(10) '\xb3', 'core-core repulsion'
+      write(10) '\xcb', (qmmm_struct%enuclr_qmqm+qmmm_struct%enuclr_qmmm)*EV_TO_KCAL
+      write(10) '\xb1', 'dispersion energy'
+      if (qmmm_nml%qmtheory%DISPERSION .or. qmmm_nml%qmtheory%DISPERSION_HYDROGENPLUS) then
+         write(10) '\xcb', qmmm_struct%dCorrection
+      else
+         write(10) '\xc0'
+      end if
+      write(10) '\xad', 'h-bond energy'
+    if (qmmm_nml%qmtheory%DISPERSION_HYDROGENPLUS) then
+         write(10) '\xcb', qmmm_struct%hCorrection
+      else
+         write(10) '\xc0'
+      end if
+
+   endif
+
    write(6,*) ''
    call qm2_print_charges(1,qmmm_nml%dftb_chg,qmmm_struct%nquant_nlink, &
                             qm2_struct%scf_mchg,qmmm_struct%iqm_atomic_numbers)
 
+   if (dump_msgpack) then
+      write(10) '\xaf', 'mulliken charge'
+      write(10) '\xdd', qmmm_struct%nquant_nlink
+      do i = 1, qmmm_struct%nquant_nlink
+         write(10) '\xcb', qm2_struct%scf_mchg(i)
+      end do
+   end if
+
    write(6,*) ''
    
-   call qm2_calc_dipole(x)
+   call qm2_calc_dipole(x, 10, dump_msgpack)
    
    write(6,*) ''
    
    write(6,*) 'Final Structure'
    call qm_print_coords(0,.true.)
+
+   write(10) '\xa1', 'x'
+   write(10) '\xdd', qmmm_struct%nquant
+   do i = 1, qmmm_struct%nquant
+      write(10) '\xcb', qmmm_struct%qm_coords(1,i)
+   end do
+   write(10) '\xa1', 'y'
+   write(10) '\xdd', qmmm_struct%nquant
+   do i = 1, qmmm_struct%nquant
+      write(10) '\xcb', qmmm_struct%qm_coords(2,i)
+   end do
+   write(10) '\xa1', 'z'
+   write(10) '\xdd', qmmm_struct%nquant
+   do i = 1, qmmm_struct%nquant
+      write(10) '\xcb', qmmm_struct%qm_coords(3,i)
+   end do
+
    if ( qmmm_nml%printbondorders ) then
       write(6,*) ''
       write(6,*) 'Bond Orders'

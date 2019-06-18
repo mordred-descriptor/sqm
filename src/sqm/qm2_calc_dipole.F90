@@ -2,7 +2,7 @@
 #include "copyright.h"
 #include "../include/dprec.fh"
 
-subroutine qm2_calc_dipole(coord)
+subroutine qm2_calc_dipole(coord, unit, dump_msgpack)
  use qmmm_module, only : qm2_params, qm2_struct, qmmm_struct, qmmm_nml
  use constants, only : light_speed, bohr_radius, charge_on_elec
 
@@ -13,6 +13,8 @@ subroutine qm2_calc_dipole(coord)
 ! from the atomic charges and the lone-pairs 
 
       _REAL_, intent(inout) :: coord(*)
+      integer :: unit
+      logical dump_msgpack
       
 ! Determination of constants are  needed for the computation of the dipole
 
@@ -88,6 +90,14 @@ subroutine qm2_calc_dipole(coord)
       write(6,'(" ","          ","       X    ","    Y    ","    Z    "," TOTAL  ")')
       write(6,'(" "," QM DIPOLE ",4F9.3)') &
             qmdipole(1), qmdipole(2), qmdipole(3), totaldipol
+
+      if (dump_msgpack) then
+         write(10) '\xa6', 'dipole'
+         write(10) '\x93'
+         write(10) '\xcb', qmdipole(1)
+         write(10) '\xcb', qmdipole(2)
+         write(10) '\xcb', qmdipole(3)
+      end if
 
       return
 end subroutine qm2_calc_dipole

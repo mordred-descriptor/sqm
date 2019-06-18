@@ -45,7 +45,7 @@ set(EXECUTABLE_SOURCES sqm.F90
 include_directories("${CMAKE_BINARY_DIR}/src/lib")
 include_directories("${CMAKE_BINARY_DIR}/src/sff")
 include_directories("${CMAKE_BINARY_DIR}/src/sqm")
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fbackslash")
 
 add_library(sqm_common ${COMMON_SOURCES})
 add_executable(sqm ${EXECUTABLE_SOURCES})
