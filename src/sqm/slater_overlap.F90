@@ -332,6 +332,10 @@ function GetSlaterCondonParameter(K,NA,EA,NB,EB,NC,EC,ND,ED) result(slaterCondon
 !     ./CONSTF/ A0,AFACT,EV,EVCAL,PI,W1,W2,BIGEXP
 !     ./CONSTN/ ZERO,ONE,TWO,THREE,FOUR,PT5,PT25
 !     ./PSC   / F(30),B(30,30)
+      if( EA.eq.0d0 .or. EB.eq.0.d0 .or. EC.eq.0.d0 .or. ED.eq.0.d0 ) then
+          slaterCondon = 0.d0
+          return
+      endif
       AEA    = LOG(EA)
       AEB    = LOG(EB)
       AEC    = LOG(EC)

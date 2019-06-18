@@ -104,10 +104,10 @@ foreach $file ( <*.F90> ){
 
 	if( $optimized{$fileroot} ){
 		printf "\n$fileroot.o:   $fileroot.F90\n";
-		printf "\t\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -c \$(FOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
+		printf "\t\@echo '[SQM]  FC \$<'\n\t\$(VB)\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -c \$(FOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
 	} else {
 		printf "\n$fileroot.o:   $fileroot.F90\n";
-		printf "\t\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -c \$(FNOOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
+		printf "\t\@echo '[SQM]  FC \$<'\n\t\$(VB)\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -c \$(FNOOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
 	}
 	if( defined $SQM{$fileroot} ){
 #	    print STDERR $fileroot,"\n";
@@ -115,12 +115,12 @@ foreach $file ( <*.F90> ){
 		printf "$fileroot.SQM.o: $depsSQM\n" unless $depsSQM eq "";
 		printf "\n$fileroot.SQM.o:   $fileroot.F90\n";
 		if( $optimized{$fileroot} ){
-			printf "\t\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -DSQM -c \$(FOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
+			printf "\t\@echo '[SQM]  FC \$<'\n\t\$(VB)\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -DSQM -c \$(FOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
 		} else {
-			printf "\t\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -DSQM -c \$(FNOOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
+			printf "\t\@echo '[SQM]  FC \$<'\n\t\$(VB)\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -DSQM -c \$(FNOOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o \$@ $fileroot.F90\n\n";
 		}
 	}
 }
 
 printf "constants.o: ../lib/constants.F90\n";
-printf "\t\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -c \$(FOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o constants.o ../lib/constants.F90\n\n";
+printf "\t\@echo '[SQM]  FC \$<'\n\t\$(VB)\$(FC) \$(FWARNFLAGS) \$(FPPFLAGS) -c \$(FOPTFLAGS) \$(FFLAGS) \$(AMBERFFLAGS) -o constants.o ../lib/constants.F90\n\n";

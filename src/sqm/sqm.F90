@@ -106,7 +106,7 @@ program sqm
    call amopen(6,mdout,owrite,'F','W')
 
    write(6,*) '           --------------------------------------------------------'
-   write(6,*) '                            AMBER SQM VERSION 17'
+   write(6,*) '                            AMBER SQM VERSION 19'
    write(6,*) ''
    write(6,*) '                                    By'
    write(6,*) '             Ross C. Walker, Michael F. Crowley, Scott Brozell,'

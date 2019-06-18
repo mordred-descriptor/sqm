@@ -377,6 +377,7 @@ contains
 
   end subroutine nsp2CorrectionGrad
 
+#if 0
   ! --------------------------------------------------------------
   ! Analytical gradient of penalty function for triple coordinated 
   ! nitrogen being non-planar
@@ -471,6 +472,7 @@ contains
     dxyz(1:3,k) = dxyz(1:3,k) + grad(1:3,4)
 
   end subroutine nsp2AtomCorrectionGrad
+#endif
 
   ! --------------------------------------------------------------
   ! Numerical gradient of penalty function for triple coordinated 

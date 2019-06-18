@@ -219,6 +219,12 @@ typedef	struct	bounds_t	{
     REAL_T fcenormsw;
     REAL_T uccoeff[4];
     REAL_T biasPotential;
+    REAL_T treeDCFMAC;
+    REAL_T treeTCFMAC;
+    REAL_T treeCoulombMAC;
+    REAL_T asympKSpaceTolerance;
+    REAL_T ljTolerance;
+    REAL_T chargeSmear;
     INT_T closureOrder;
     INT_T ng3[3];
     INT_T rism;      /* non-zero if RISM is turned on */
@@ -251,10 +257,19 @@ typedef	struct	bounds_t	{
     INT_T verbose;
     INT_T progress;
     INT_T write_thermo; 
+    INT_T treeDCFOrder;
+    INT_T treeTCFOrder;
+    INT_T treeCoulombOrder;
+    INT_T treeDCFN0;
+    INT_T treeTCFN0;
+    INT_T treeCoulombN0;
     INT_T selftest;
+    INT_T treeDCF;
+    INT_T treeTCF;
+    INT_T treeCoulomb;
     /*This is an unused variable that aligns
       the type on eight byte boundaries*/
-    INT_T padding;
+    //INT_T padding; 
   } RismData;
 
 #ifdef RISMSFF

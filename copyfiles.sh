@@ -4,7 +4,7 @@ SRC=$1
 DST=$(cd $(dirname $0); pwd)/src
 
 mkdir -p $DST/{include,lib,blas,lapack,sff,sqm}
-mkdir -p $DST/../{test}
+mkdir -p $DST/../test
 
 for file in $SRC/include/{assert.fh,dprec.fh,md.h,memory.h}; do
     cp $file $DST/include/
@@ -29,5 +29,5 @@ done
 cp $SRC/sff/{sff.h,xminC.c} $DST/sff/
 
 cp $SRC/../LICENSE $DST/../LICENSE.orig
-cp -r $SRC/../test/sqm $DST/../test/sqm
+cp -r $SRC/../test/sqm/ $DST/../test/sqm/
 cp $SRC/../test/{dacdif,ndiff.awk} $DST/../test/

@@ -14,7 +14,7 @@ public Rotate2Center2Electron, Rotate1Elec, RotateCore
 
 
 
-private GenerateRotationMatrix, rotationMatrix, xij_saved, tolerance
+private GenerateRotationMatrix, xij_saved, tolerance
 
     _REAL_, save::matrix_saved(15,45)
     _REAL_, save::xij_saved(3)=(/ 1.0D9, 1.0D9, 1.0D9 /) 

@@ -1305,9 +1305,13 @@
               base_temp2 = s_orb_exp_pm6(iqm_atomic) + p_orb_exp_pm6(iqm_atomic)
               qm2_params%multip_2c_elec_params(1,i) = ((base_temp1**exponent_temp1)*(2.0d0*nsshell(iqm_atomic) + 1.0d0)) &
                                                       / ((base_temp2**exponent_temp2) * sqrt(3.0d0))
-              qm2_params%multip_2c_elec_params(2,i) = &
+              if( p_orb_exp_pm6(iqm_atomic) .ne. 0d0 ) then
+                 qm2_params%multip_2c_elec_params(2,i) = &
                      sqrt((4.0d0*nsshell(iqm_atomic)**2+6.0d0*nsshell(iqm_atomic) &
                     +2.0d0)/20.0d0)/p_orb_exp_pm6(iqm_atomic)
+               else
+                  qm2_params%multip_2c_elec_params(2,i)= 0.0d0
+               endif
           else
             qm2_params%multip_2c_elec_params(1,i)= 0.0d0
             qm2_params%multip_2c_elec_params(2,i)= 0.0d0

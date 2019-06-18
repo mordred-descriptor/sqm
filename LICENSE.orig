@@ -41,7 +41,7 @@ in this file.
   http://creativecommons.org/licenses/by-sa/4.0/
 
 * The cusplibrary codes are distributed by the Apache License 2.0
-  (see src/cusplibrary-0.6.0-rc/LICENSE).
+  (see src/cusplibrary-cuda9/LICENSE).
 
 Note especially the following, from the GPL file:
 

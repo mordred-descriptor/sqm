@@ -96,7 +96,11 @@ subroutine GetDDAndPho(qmtype, DD, PO)
       DD(2) = AIJ22/SQRT(THREE)
       PO(2) = POIJ(1,DD(2), qm2_params%hsp(qmtype))
 
-      DD(3) = SQRT((2*NP+1)*(2*NP+2)/20.0D0) / ZP
+      if( ZP.ne.0.d0) then
+         DD(3) = SQRT((2*NP+1)*(2*NP+2)/20.0D0) / ZP
+      else
+         DD(3) = 0.d0
+      endif
       PO(3) = POIJ(2,DD(3)*SQRT(TWO),qm2_params%hpp(qmtype))
 
       PO(7) = PO(1)
@@ -365,7 +369,11 @@ FUNCTION POIJ (L,D,FG)
       _REAL_::DSQ, EV4, EV8, A1, A2, Y1, Y2, DELTA, F1, F2
 
       IF(L.EQ.0) THEN
-         POIJ = half*AU_TO_EV/FG
+         if(FG.ne.0.d0) then
+            POIJ = half*AU_TO_EV/FG
+         else
+            POIJ = 0.d0
+         endif
          RETURN
       ENDIF
 ! *** HIGHER TERMS.
