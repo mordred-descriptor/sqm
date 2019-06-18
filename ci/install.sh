@@ -9,7 +9,7 @@ if [[ "$OS_NAME" == Windows ]]; then
     EXTENSION=exe
 elif [[ "$OS_NAME" == Linux ]]; then
     sudo apt update -y
-    sudo apt install nkf cmake3 gfortran gcc
+    sudo apt install nkf cmake gfortran gcc
 elif [[ "$OS_NAME" == MacOSX ]]; then
     brew list gcc &> /dev/null || brew install gcc
     brew list cmake &> /dev/null || brew install cmake
