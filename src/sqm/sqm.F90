@@ -118,7 +118,7 @@ program sqm
    call amopen(6,mdout,owrite,'F','W')
    if (dump_msgpack) then
       open(10, file=msgpackout, status='replace', form='unformatted', access='stream', convert='big_endian')
-      write(10) '\xde', 14_2, '\xa7', 'version', 1_1
+      write(10) '\xde', 15_2, '\xa7', 'version', 1_1
    end if
 
    write(6,*) '           --------------------------------------------------------'
@@ -274,26 +274,35 @@ program sqm
    write(6,*) 'Final Structure'
    call qm_print_coords(0,.true.)
 
-   write(10) '\xa1', 'x'
-   write(10) '\xdd', qmmm_struct%nquant
-   do i = 1, qmmm_struct%nquant
-      write(10) '\xcb', qmmm_struct%qm_coords(1,i)
-   end do
-   write(10) '\xa1', 'y'
-   write(10) '\xdd', qmmm_struct%nquant
-   do i = 1, qmmm_struct%nquant
-      write(10) '\xcb', qmmm_struct%qm_coords(2,i)
-   end do
-   write(10) '\xa1', 'z'
-   write(10) '\xdd', qmmm_struct%nquant
-   do i = 1, qmmm_struct%nquant
-      write(10) '\xcb', qmmm_struct%qm_coords(3,i)
-   end do
+   if (dump_msgpack) then
+      write(10) '\xa1', 'x'
+      write(10) '\xdd', qmmm_struct%nquant
+      do i = 1, qmmm_struct%nquant
+         write(10) '\xcb', qmmm_struct%qm_coords(1,i)
+      end do
+      write(10) '\xa1', 'y'
+      write(10) '\xdd', qmmm_struct%nquant
+      do i = 1, qmmm_struct%nquant
+         write(10) '\xcb', qmmm_struct%qm_coords(2,i)
+      end do
+      write(10) '\xa1', 'z'
+      write(10) '\xdd', qmmm_struct%nquant
+      do i = 1, qmmm_struct%nquant
+         write(10) '\xcb', qmmm_struct%qm_coords(3,i)
+      end do
+   end if
 
+   if (dump_msgpack) then
+      write(10) '\xaa', 'bondorders'
+   end if
    if ( qmmm_nml%printbondorders ) then
       write(6,*) ''
       write(6,*) 'Bond Orders'
-      call qm2_print_bondorders()
+      call qm2_print_bondorders(10, dump_msgpack)
+   else
+      if (dump_msgpack) then
+         write(10) '\xc0'
+      end if
    end if
 
    if (qmmm_nml%verbosity > 3) then
