@@ -1,6 +1,6 @@
 package:
   name: sqm
-  version: "19.3{{environ.get("SQM_VERSION_SUFFIX", "")}}"
+  version: "19.3.0{{environ.get("SQM_VERSION_SUFFIX", "")}}"
 
 source:
   path: ../..
